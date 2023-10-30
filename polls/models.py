@@ -11,7 +11,8 @@ class Poll(models.Model):
     title = models.CharField(max_length=128, default="", blank=False)
     poll_date = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=True)
-    
+    status = models.BooleanField(null=True, blank=False, default=True)
+
     @property
     def all_votes(self):
         return self.poll_option.aggregate(Sum('votes'))['votes__sum'] or 0

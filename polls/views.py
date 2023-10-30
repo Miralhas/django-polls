@@ -25,19 +25,15 @@ def poll_page(request, poll_pk):
 @login_required(login_url="/login")
 def add_poll(request, number_options):
     if request.method == "POST":
+        post_keys = ["title", "csrfmiddlewaretoken"]
+        poll = Poll.objects.create(title=request.POST["title"], owner=request.user)
         for post, value in request.POST.items():
-            if post == "csrfmiddlewaretoken":
-                pass
-            elif post == "title":
-                poll = Poll.objects.create(title=value, owner=request.user)
-                poll.save()
-            else:    
+            if post not in post_keys:
                 Option.objects.create(text=value, poll=poll)
 
         return HttpResponseRedirect(reverse("index"))
-    # poll = Poll.objects.get(pk=poll_pk)
+    
     for_range = range(1, int(number_options)+1)
-
     return render(request, "polls/add_poll.html", context={
         "range": for_range,
         "number_options": number_options,

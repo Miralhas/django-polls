@@ -13,6 +13,9 @@
         {% if request.user.is_authenticated %}
             <a href="{% url 'index' %}" style="margin-right: 4px;">Index</a>
             <a href="{% url 'logout' %}">Logout</a>
+            <div>
+                User: <strong>{{request.user}}</strong>
+            </div>
         {% else %}
             <a href="{% url 'index' %}" style="margin-right: 4px;">Index</a>
             <a href="{% url 'login' %}" style="margin-right: 4px;">Login</a>
