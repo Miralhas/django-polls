@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required 
 from django.http import HttpResponseRedirect
 from .models import Poll, Option, User
 from django.db import IntegrityError
@@ -21,7 +22,7 @@ def poll_page(request, poll_pk):
         "options": poll.poll_option.all().order_by("-votes")
     })
 
-
+@login_required(login_url="/login")
 def add_poll(request, number_options):
     if request.method == "POST":
         for post, value in request.POST.items():

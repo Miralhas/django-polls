@@ -14,8 +14,9 @@
             <a href="{% url 'index' %}" style="margin-right: 4px;">Index</a>
             <a href="{% url 'logout' %}">Logout</a>
         {% else %}
+            <a href="{% url 'index' %}" style="margin-right: 4px;">Index</a>
             <a href="{% url 'login' %}" style="margin-right: 4px;">Login</a>
-            <a href="{% url 'register' %}">Register</a>
+            <a href="{% url 'register' %}" style="margin-right: 4px;">Register</a>
         {% endif %}
         {% block body %}
 
