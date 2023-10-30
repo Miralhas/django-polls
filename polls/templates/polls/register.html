@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+    <body>
+        <h1>Register</h1>
+        {% if message %}
+            <h3 style="color: red;">{{message}}</h3>
+        {% endif %}
+        
+        <form action="{% url 'register' %}" method="POST">
+            {% csrf_token %}
+            <label for="username">Username:</label>
+            <div style="margin-bottom: 4px;">
+                <input type="text" name="username" placeholder="Username" id="username" autofocus>
+            </div>
+            <label for="password">Passowrd:</label>
+            <div style="margin-bottom: 4px;">
+                <input type="password" name="password" placeholder="Password" id="password">
+            </div>
+            <label for="confirmation">Confirmation:</label>
+            <div style="margin-bottom: 5px;">
+                <input type="password" name="confirmation" placeholder="Password" id="confirmation">
+            </div>
+            <input type="submit">
+        </form>
+    </body>
+</html>

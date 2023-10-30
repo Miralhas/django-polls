@@ -1,0 +1,18 @@
+{% extends 'polls/layout.html' %}
+
+{% block body %}
+    <form action="{% url 'add_poll' number_options %}" method="POST">
+        {% csrf_token %}
+        <label for="">Poll Title: </label>
+        <div>
+            <input type="text" placeholder="Title" name="title" required>
+        </div>
+        <label for="">Options:</label>
+        {% for i in range %}
+            <div style="margin: 4px 0px 4px 0px;">
+                <input type="text" name="option{{i}}" placeholder="Option {{i}}" required>
+            </div>
+        {% endfor %}
+        <input type="submit">
+    </form>
+{% endblock %}

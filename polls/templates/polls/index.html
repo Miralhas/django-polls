@@ -1,0 +1,39 @@
+{% extends 'polls/layout.html' %}
+
+{% block body %}
+    <h1>Polls Website</h1>
+    {% if request.user.is_authenticated %}
+        <div style="margin: 20px 0px 20px 0px;">
+            <p class="d-inline-flex gap-1">
+                <button class="" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
+                    aria-expanded="false" aria-controls="collapseExample">
+                    Criar Poll
+                </button>
+            </p>
+        </div>
+        <div class="collapse" id="collapseExample">
+            <div class="card card-body" style="margin-left: 3px; width: fit-content;">
+                <form action="{% url 'index' %}" method="post">
+                    {% csrf_token %}
+                    <label for="">Number of Options: </label>
+                    <div>
+                        <input type="number" name="number_options" id="number_options" min="2" max="5">
+                        <input type="submit">
+                    </div>
+                </form>
+            </div>
+        </div>
+    {% endif %}
+    {% for poll in polls %}
+        <div class="poll-{{poll.pk}}" style="padding: 10px 10px 0px 10px; margin-bottom: 10px; border: 1px solid green;">
+            <a href="{% url 'poll_page' poll.pk %}">{{poll.title}}</a>
+            <p>
+                Owner: <strong>{{poll.owner}}</strong> <br>
+                Created: <strong>{{poll.poll_date}}</strong> <br>
+                Votes: <strong>{{poll.all_votes}}</strong>
+            </p>
+        </div>
+    {% empty %}
+        <p>No polls created.</p>
+    {% endfor %}
+{% endblock %}

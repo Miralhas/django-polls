@@ -1,0 +1,29 @@
+{% extends 'polls/layout.html' %}
+
+{% block body %}
+    {% if request.user == poll.owner %}
+        <div style="margin: 20px 0px 20px 0px;">
+            <button>Close Poll</button>
+        </div>
+    {% endif %}
+    <h3 style="margin-bottom: 10px;">{{poll.title}}</h3>
+    <div class="panel-body" style="width: 40%;">
+        <form action="{% url 'poll_page' poll.pk %}" method="post">
+            {% csrf_token %}
+            <ul class="list-group">
+                {% for option in options %}
+                    <li class="list-group-item">
+                        <div class="radio" style="display: flex; justify-content: space-between;">
+                            <label>
+                                <input type="radio" name="vote" value="{{option.pk}}" >
+                                {{option.text}}
+                            </label>
+                            <strong>{{option.votes}}</strong>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+            <input type="submit" value="Vote" style="margin-top: 5px;">   
+        </form>
+    </div>
+{% endblock %}
