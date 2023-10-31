@@ -21,7 +21,7 @@
 	<br>
 - Poll Voting and Display
 	- All polls are displayed on the index page. Users can cast their votes on a poll. The vote count for each option in a poll is updated when a vote is cast. The polls and their options are retrieved using Django's ORM system.
-![image](https://github.com/Miralhas/django-polls/assets/89564433/0fde03ee-c6b3-488a-ab14-69f3691a88f0)
+	- ![image](https://github.com/Miralhas/django-polls/assets/89564433/0fde03ee-c6b3-488a-ab14-69f3691a88f0)
 - Poll Management
 	- The owner of a poll can end or delete it. If a poll is ended, it is updated to reflect its ended status. If a poll is deleted, it is removed from the database.
 
