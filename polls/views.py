@@ -8,6 +8,19 @@ from django.urls import reverse
 
 # Create your views here.
 
+def poll_status(request, poll_pk, status):
+    poll = Poll.objects.get(pk=poll_pk)
+    if request.user == poll.owner:
+        if status == "end_poll":
+            poll.status = False
+            poll.save()
+            return HttpResponseRedirect(reverse("poll_page", args=(poll_pk, )))
+        elif status == "delete_poll":
+            poll.delete()
+            return HttpResponseRedirect(reverse("index"))
+    else:
+        return HttpResponseRedirect(reverse("index"))
+
 
 def poll_page(request, poll_pk):
     poll = Poll.objects.get(pk=poll_pk)
@@ -17,9 +30,10 @@ def poll_page(request, poll_pk):
         option.votes +=1
         option.save()
         return HttpResponseRedirect(reverse("index"))
+    
     return render(request, "polls/poll_page.html", context={
         "poll": poll,
-        "options": poll.poll_option.all().order_by("-votes")
+        "options": poll.poll_option.all().order_by("-votes"),
     })
 
 @login_required(login_url="/login")
@@ -27,6 +41,7 @@ def add_poll(request, number_options):
     if request.method == "POST":
         post_keys = ["title", "csrfmiddlewaretoken"]
         poll = Poll.objects.create(title=request.POST["title"], owner=request.user)
+
         for post, value in request.POST.items():
             if post not in post_keys:
                 Option.objects.create(text=value, poll=poll)

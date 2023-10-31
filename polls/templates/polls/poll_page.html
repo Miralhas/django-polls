@@ -2,48 +2,50 @@
 
 {% block body %}
     {% if request.user == poll.owner %}
-        <div style="margin: 20px 0px 20px 0px;">
-            <button>Close Poll</button>
+        <div style="margin: 10px 0px 20px 0px;">
+            {% if poll.status %}
+                <a href="{% url 'poll_status' poll.pk 'end_poll' %}"><button style="color: green;">End Poll</button></a>
+            {% endif %}
+                <a href="{% url 'poll_status' poll.pk 'delete_poll' %}"><button style="color: red;">Delete poll</button></a>
         </div>
+    {% endif %}
+    {% if not poll.status %}
+        {% if options.0.votes == options.1.votes %}
+            <h4 style=" margin: 20px 0px 20px 0px;"><strong>Draw!</strong></h4>
+        {% else %}
+            <h4 style=" margin: 20px 0px 20px 0px;"><strong style="color: green;">{{options.0.text}}</strong> is the winner!</h4>
+        {% endif %}
+        
     {% endif %}
     <h3 style="margin-bottom: 10px;">{{poll.title}}</h3>
     <div class="panel-body" style="width: 40%;">
         {% if request.user.is_authenticated %}
             <form action="{% url 'poll_page' poll.pk %}" method="post">
-                {% csrf_token %}
-                <ul class="list-group">
-                    {% for option in options %}
-                        <li class="list-group-item">
-                            <div class="radio" style="display: flex; justify-content: space-between;">
-                                <label>
-                                    <input type="radio" name="vote" value="{{option.pk}}" >
-                                    {{option.text}}
-                                </label>
-                                <strong>{{option.votes}}</strong>
-                            </div>
-                        </li>
-                    {% endfor %}
-                </ul>
-                <input type="submit" value="Vote" style="margin-top: 5px;">   
-            </form>
-        {% else %}
-            <form action="{% url 'login' %}" method="get">
-                {% csrf_token %}
-                <ul class="list-group">
-                    {% for option in options %}
-                        <li class="list-group-item">
-                            <div class="radio" style="display: flex; justify-content: space-between;">
-                                <label>
-                                    <input type="radio" name="vote" value="{{option.pk}}" disabled>
-                                    {{option.text}}
-                                </label>
-                                <strong>{{option.votes}}</strong>
-                            </div>
-                        </li>
-                    {% endfor %}
-                </ul>
-                <input type="submit" value="Vote" style="margin-top: 5px;">   
-            </form>
         {% endif %}
+            {% csrf_token %}
+            <ul class="list-group">
+                {% for option in options %}
+                    <li class="list-group-item" style="border: 1px solid black;">
+                        <div class="radio" style="display: flex; justify-content: space-between;">
+                            <label>
+                                {% if request.user.is_authenticated and poll.status %}
+                                    <input type="radio" name="vote" value="{{option.pk}}"> {{option.text}}
+                                {% else %}
+                                    <input type="radio" name="vote" value="{{option.pk}}" disabled> {{option.text}}
+                                {% endif %}
+                            </label>
+                            <strong>{{option.votes}}</strong>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+            {% if request.user.is_authenticated and poll.status%}
+                <input type="submit" value="Vote" style="margin-top: 5px;">
+            {% elif not request.user.is_authenticated and poll.status%}
+                <a href="{% url 'login' %}"><button>Log in to vote</button></a>
+            {% elif not poll.status %}
+                <strong>Poll is Over!</strong>
+            {% endif %}
+        </form>
     </div>
 {% endblock %}
